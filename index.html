@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>I Love You ❤️</title>
+  <style>
+    :root {
+      --candy-pink: #ff4d6d;
+      --bubblegum: #ff758f;
+      --cozy-brown: #590d22;
+      /* Głęboki, romantyczny gradient w tle */
+      --pastel-bg: linear-gradient(135deg, #ff7eb3 0%, #ff758c 100%);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    }
+
+    body {
+      background: var(--pastel-bg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Romantyczne delikatne tło */
+    .bg-decor {
+      position: absolute;
+      font-size: 1.8rem;
+      opacity: 0.2;
+      pointer-events: none;
+      z-index: 1;
+      bottom: -50px;
+      animation: floatUp 14s infinite linear;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0deg) scale(0.8); }
+      50% { opacity: 0.4; }
+      100% { transform: translateY(-115vh) rotate(360deg) scale(1.2); }
+    }
+    .b1 { left: 15%; animation-duration: 16s; }
+    .b2 { left: 35%; animation-duration: 22s; animation-delay: 2s; }
+    .b3 { left: 65%; animation-duration: 18s; animation-delay: 1s; }
+    .b4 { left: 85%; animation-duration: 20s; animation-delay: 4s; }
+
+    #game-container {
+      width: 100%;
+      max-width: 412px;
+      height: 100vh;
+      max-height: 892px;
+      /* Cieplejsze, różane tło aplikacji */
+      background: linear-gradient(180deg, #fff0f3 0%, #ffb3c6 100%);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 15px 50px rgba(128, 15, 47, 0.3);
+      border: 6px solid #ffffff;
+      border-radius: 42px;
+      z-index: 2;
+    }
+
+    #particle-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .app-header {
+      padding: 24px 24px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 5;
+    }
+
+    .title-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 900;
+      font-size: 1.35rem;
+      color: var(--candy-pink);
+      text-shadow: 1px 1px 0px rgba(255,255,255,0.9);
+      cursor: pointer;
+    }
+
+    .title-logo span {
+      font-size: 1.6rem;
+      animation: heartBeat 1.5s infinite;
+    }
+
+    .sound-toggle {
+      background: white;
+      border: 2px solid #ff8fa3;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.3s;
+    }
+
+    .sound-toggle.active {
+      background: var(--candy-pink);
+      border-color: var(--candy-pink);
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .status-dashboard {
+      padding: 0 24px;
+      width: 100%;
+      z-index: 5;
+    }
+
+    .level-bar-container {
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid #ff8fa3;
+      border-radius: 20px;
+      height: 38px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .level-bar-fill {
+      height: 100%;
+      width: 0%; /* Zaczyna się od zera */
+      background: linear-gradient(90deg, #ff4d6d 0%, #c9184a 100%);
+      border-radius: 18px;
+      transition: width 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+    }
+    
+    .level-bar-fill.full {
+      box-shadow: 0 0 15px rgba(255, 77, 109, 0.8);
+      animation: glowPulse 1.5s infinite alternate;
+    }
+
+    @keyframes glowPulse {
+      0% { box-shadow: 0 0 10px rgba(255, 77, 109, 0.5); }
+      100% { box-shadow: 0 0 25px rgba(255, 77, 109, 1); }
+    }
+
+    .level-text {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      font-weight: 850;
+      font-size: 0.88rem;
+      color: #ffffff; /* Biały tekst, gdy pasek się napełnia */
+      text-shadow: 1px 1px 2px rgba(89, 13, 34, 0.8);
+    }
+
+    .bubble-wrapper {
+      padding: 10px 24px 0;
+      width: 100%;
+      min-height: 105px;
+      display: flex;
+      justify-content: center;
+      z-index: 5;
+    }
+
+    .speech-bubble {
+      background: #ffffff;
+      border: 3.5px solid #ff8fa3;
+      border-radius: 24px;
+      padding: 14px 20px;
+      width: 100%;
+      position: relative;
+      color: var(--cozy-brown);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      font-weight: 700;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(128, 15, 47, 0.1);
+      animation: floatMotion 4s ease-in-out infinite;
+    }
+
+    .speech-bubble::after, .speech-bubble::before {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-style: solid;
+      display: block;
+      width: 0;
+    }
+    .speech-bubble::after {
+      border-width: 15px 15px 0;
+      border-color: #ffffff transparent;
+    }
+    .speech-bubble::before {
+      border-width: 16px 16px 0;
+      border-color: #ff8fa3 transparent;
+      bottom: -19px;
+      z-index: -1;
+    }
+
+    .game-world-stage {
+      flex-grow: 1;
+      width: 100%;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      padding-bottom: 30px;
+      z-index: 2;
+    }
+
+    .love-mailbox {
+      position: absolute;
+      bottom: 50px;
+      left: 28px;
+      font-size: 3.6rem;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .love-mailbox:hover { transform: scale(1.15) rotate(-5deg); }
+    .love-mailbox.unread::after {
+      content: '💌';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      font-size: 1.5rem;
+      animation: envelopePop 0.8s ease-in-out infinite alternate;
+    }
+
+    /* --- PIESEK MAKSIU --- */
+    .puppy-container {
+      position: relative;
+      width: 175px;
+      height: 175px;
+      cursor: pointer;
+      margin-bottom: 25px;
+    }
+
+    .puppy-shadow {
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 140px;
+      height: 16px;
+      background: rgba(89, 13, 34, 0.15);
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+    .puppy-body-wrapper {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      z-index: 2;
+      transform-origin: bottom center;
+      will-change: transform;
+    }
+    .puppy-body-wrapper.idle-breath { animation: puppyBreath 3s ease-in-out infinite; }
+
+    .p-head {
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 100px;
+      background: #e5a65d;
+      border-radius: 60px 60px 50px 50px;
+      z-index: 5;
+    }
+
+    /* Easter Egg: Uszka! */
+    .p-ear {
+      position: absolute;
+      width: 35px;
+      height: 70px;
+      background: #c5863d;
+      border-radius: 50% 50% 40% 40%;
+      top: 0px;
+      transform-origin: top center;
+      cursor: pointer;
+    }
+    .p-ear.left { left: -5px; transform: rotate(-18deg); animation: earWiggleL 5s infinite; }
+    .p-ear.right { right: -5px; transform: rotate(18deg); animation: earWiggleR 5s infinite; }
+
+    .p-eye {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: #2b1d1d;
+      border-radius: 50%;
+      top: 45px;
+      transition: all 0.25s;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .p-eye.left { left: 28px; }
+    .p-eye.right { right: 28px; }
+    .p-eye::after {
+      content: '';
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background: white;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+    }
+
+    .p-eye.eye-love { background: transparent !important; font-size: 1.4rem; }
+    .p-eye.eye-love::after { opacity: 0; }
+    .p-eye.eye-happy { background: transparent !important; border-top: 4px solid #2b1d1d; border-radius: 50% 50% 0 0; height: 6px; width: 16px; }
+    .p-eye.eye-happy::after { opacity: 0; }
+    .p-eye.eye-sad { background: transparent !important; border-bottom: 4px solid #2b1d1d; border-radius: 0 0 50% 50%; height: 6px; width: 16px; }
+    .p-eye.eye-sad::after { opacity: 0; }
+
+    .p-snout {
+      position: absolute;
+      top: 55px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 34px;
+      background: #ffffff;
+      border-radius: 25px;
+    }
+    /* Easter Egg: Nosek */
+    .p-nose {
+      position: absolute;
+      top: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 17px;
+      height: 12px;
+      background: #2b1d1d;
+      border-radius: 10px 10px 6px 6px;
+      cursor: pointer;
+    }
+    .p-mouth {
+      position: absolute;
+      bottom: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 16px;
+      height: 8px;
+      border: 2px solid #2b1d1d;
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+      transition: all 0.2s;
+    }
+
+    .p-blush {
+      position: absolute;
+      width: 16px;
+      height: 10px;
+      background: rgba(255, 77, 109, 0.5);
+      border-radius: 50%;
+      top: 58px;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .p-blush.left { left: 16px; }
+    .p-blush.right { right: 16px; }
+    .blushing .p-blush { background: rgba(201, 24, 74, 0.9); transform: scale(1.35); }
+
+    .p-chest {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90px;
+      height: 70px;
+      background: #e5a65d;
+      border-radius: 40px 40px 25px 25px;
+      z-index: 3;
+    }
+    .p-chest::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 15px;
+      width: 60px;
+      height: 45px;
+      background: #ffffff;
+      border-radius: 30px;
+    }
+
+    /* Easter Egg: Łapki */
+    .p-paw {
+      position: absolute;
+      width: 25px;
+      height: 20px;
+      background: #ffffff;
+      border-radius: 12px 12px 8px 8px;
+      bottom: 5px;
+      z-index: 4;
+      cursor: pointer;
+    }
+    .p-paw.left { left: 40px; }
+    .p-paw.right { right: 105px; }
+
+    /* Easter Egg: Ogonek */
+    .p-tail {
+      position: absolute;
+      width: 22px;
+      height: 45px;
+      background: #c5863d;
+      border-radius: 12px;
+      right: 25px;
+      bottom: 25px;
+      transform-origin: bottom left;
+      transform: rotate(35deg);
+      animation: tailWag 1s infinite alternate linear;
+      z-index: 2;
+      cursor: pointer;
+    }
+
+    .dog-nest {
+      position: absolute;
+      bottom: 2px;
+      width: 220px;
+      height: 40px;
+      background: #ffb3c6;
+      border: 4px solid #ff8fa3;
+      border-radius: 50%;
+      z-index: 1;
+      box-shadow: inset 0 2px 10px rgba(255, 77, 109, 0.2);
+    }
+
+    /* --- DOLNY PANEL --- */
+    .control-dock {
+      background: #ffffff;
+      border-top: 3px solid #ffccd5;
+      border-radius: 36px 36px 0 0;
+      padding: 16px 20px 30px;
+      z-index: 10;
+    }
+
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .dock-btn {
+      background: #ffffff;
+      border: 2.5px solid #ffccd5;
+      border-radius: 20px;
+      padding: 16px 4px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: transform 0.1s, background 0.25s, border-color 0.25s;
+    }
+    .dock-btn:hover { background: #fffcfd; border-color: #ff8fa3; }
+    .dock-btn .btn-icon { font-size: 1.8rem; transition: transform 0.2s; }
+    .dock-btn:hover .btn-icon { transform: scale(1.15); }
+    .dock-btn span { font-size: 0.8rem; font-weight: 850; color: var(--cozy-brown); }
+    .dock-btn:active { transform: scale(0.9); }
+
+    /* --- PAMIĘTNIK / POCZTA MIŁOŚCI --- */
+    #diary-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 227, 232, 0.98);
+      z-index: 100;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .diary-headline {
+      font-size: 1.45rem;
+      font-weight: 900;
+      color: #c9184a;
+      margin-bottom: 24px;
+      text-align: center;
+      text-shadow: 1px 1px 0 white;
+      animation: heartBeat 2s infinite;
+    }
+
+    .envelope-box {
+      width: 290px;
+      height: 190px;
+      background: #ff8fa3;
+      border-radius: 12px;
+      position: relative;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(201, 24, 74, 0.25);
+    }
+    .envelope-box::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      border-left: 145px solid transparent; border-right: 145px solid transparent; border-top: 105px solid #ff758f;
+      transform-origin: top; transition: transform 0.5s ease-in-out; z-index: 4;
+    }
+    .envelope-box::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      border-left: 145px solid #ffb3c6; border-right: 145px solid #ffb3c6;
+      border-top: 95px solid transparent; border-bottom: 95px solid #ffb3c6; border-radius: 12px; z-index: 3;
+    }
+    .envelope-box.opened::before { transform: rotateX(180deg); z-index: 1; }
+
+    .envelope-seal {
+      position: absolute; top: 95px; left: 50%;
+      transform: translate(-50%, -50%) scale(1); font-size: 2.8rem; z-index: 5; transition: all 0.4s;
+    }
+    .envelope-box.opened .envelope-seal { transform: translate(-50%, -150px) scale(0); opacity: 0; }
+
+    .letter-paper {
+      position: absolute; bottom: 10px; left: 15px; right: 15px; height: 160px;
+      background: #fffcfd; border-radius: 10px; border: 1.5px solid #ffccd5; padding: 24px 20px; z-index: 2;
+      transition: transform 0.6s 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.1), height 0.6s 0.2s; overflow-y: auto;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    .envelope-box.opened .letter-paper { transform: translateY(-220px); height: 420px; z-index: 10; }
+    .letter-paper h3 { color: #c9184a; font-size: 1.25rem; margin-bottom: 15px; font-family: Georgia, serif; text-align: center; }
+    .letter-paper p { font-family: Georgia, serif; font-size: 1.05rem; color: #590d22; line-height: 1.6; margin-bottom: 15px; text-align: center; }
+    .letter-close-btn { background: linear-gradient(90deg, #ff4d6d 0%, #c9184a 100%); color: white; border: none; padding: 12px 24px; border-radius: 20px; font-weight: bold; cursor: pointer; margin-top: 15px; width: 100%; box-shadow: 0 4px 10px rgba(255, 77, 109, 0.3); }
+
+    /* --- ANIMACJE --- */
+    @keyframes heartBeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+    @keyframes floatMotion { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    @keyframes puppyBreath { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04, 0.97); } }
+    @keyframes earWiggleL { 0%, 90%, 100% { transform: rotate(-18deg); } 95% { transform: rotate(-28deg); } }
+    @keyframes earWiggleR { 0%, 88%, 100% { transform: rotate(18deg); } 93% { transform: rotate(28deg); } }
+    @keyframes tailWag { 0% { transform: rotate(15deg); } 100% { transform: rotate(55deg); } }
+    @keyframes tailCrazyWag { 0% { transform: rotate(-10deg); } 100% { transform: rotate(80deg); } }
+    @keyframes envelopePop { 0% { transform: translateY(0) scale(1); } 100% { transform: translateY(-5px) scale(1.15); } }
+    @keyframes chewBite { 0%, 100% { transform: scale(1); } 50% { transform: scale(0.93, 1.1); } }
+  </style>
+</head>
+<body>
+
+  <!-- Romantyczne pływające dekoracje -->
+  <div class="bg-decor b1">🌹</div>
+  <div class="bg-decor b2">✨</div>
+  <div class="bg-decor b3">💖</div>
+  <div class="bg-decor b4">🌸</div>
+
+  <div id="game-container">
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="app-header">
+      <div class="title-logo" onclick="happyBurst(); secretAymenWhisper();">
+         <span>💖 My Sweet Oliwia💖</span>
+      </div>
+      <div class="sound-toggle active" id="audio-toggle-btn" onclick="toggleCuteAudio()">🔊</div>
+    </div>
+
+    <div class="status-dashboard">
+      <div class="level-bar-container">
+        <!-- Pasek zaczyna od 0% -->
+        <div class="level-bar-fill" id="love-bar"></div>
+        <div class="level-text">Serduszko: <span id="love-percent">0</span>%</div>
+      </div>
+    </div>
+
+    <div class="bubble-wrapper">
+      <div class="speech-bubble" id="bubble-speech">
+        Hau hau! Oliwia, brakuje mi miłości! Napełnij pasek do 100%, a pokażę Ci niespodziankę, którą zostawił dla Ciebie Aymen! 🐾🌹
+      </div>
+    </div>
+
+    <div class="game-world-stage" id="stage-arena">
+      <div class="love-mailbox" id="mailbox" onclick="openLovePost()" title="Poczta Miłości">📮</div>
+
+      <div class="puppy-container" id="maksiu-avatar">
+        <div class="puppy-body-wrapper idle-breath" id="puppy-motion">
+          
+          <div class="p-ear left" id="ear-l" onclick="tickleEar(event, 'lewe')"></div>
+          <div class="p-ear right" id="ear-r" onclick="tickleEar(event, 'prawe')"></div>
+          
+          <div class="p-tail" id="puppy-tail" onclick="wagTailSecret(event)"></div>
+          <div class="p-chest"></div>
+          
+          <div class="p-paw left" onclick="pawHighFive(event, 'lewą')"></div>
+          <div class="p-paw right" onclick="pawHighFive(event, 'prawą')"></div>
+
+          <div class="p-head" id="puppy-head" onclick="tapTicklePuppy(event)">
+            <div class="p-eye left" id="eye-l"></div>
+            <div class="p-eye right" id="eye-r"></div>
+            <div class="p-blush left"></div>
+            <div class="p-blush right"></div>
+            <div class="p-snout">
+              <div class="p-nose" onclick="sneezeSecret(event)"></div>
+              <div class="p-mouth" id="maksiu-mouth"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dog-nest"></div>
+        <div class="puppy-shadow"></div>
+      </div>
+    </div>
+
+    <div class="control-dock">
+      <div class="actions-grid">
+        <button class="dock-btn" onclick="feedRandomTreat()">
+          <span class="btn-icon">🍩</span>
+          <span>Nakarm</span>
+        </button>
+        <button class="dock-btn" onclick="sendKisses()">
+          <span class="btn-icon">💋</span>
+          <span>Ucałuj</span>
+        </button>
+        <button class="dock-btn" onclick="tapTicklePuppy(event)">
+          <span class="btn-icon">🌸</span>
+          <span>Miziaj</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Poczta Miłości (Pojawia się przy 100%) -->
+  <div id="diary-overlay">
+    <div class="diary-headline">✨ Otwórz, Kochanie ✨</div>
+    <div class="envelope-box" id="envelope-letter" onclick="revealLetterPaper()">
+      <div class="envelope-seal">💖</div>
+      <div class="letter-paper" onclick="event.stopPropagation()">
+        <h3 id="letter-title">Wczytywanie miłości...</h3>
+        <p id="letter-text">Wczytywanie...</p>
+        <button class="letter-close-btn" onclick="closeDiaryOverlay()">Zamknij i przytul mnie mocno 🌹</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Konfiguracja - Start od ZERA
+    let happiness = 0;
+    const targetHappiness = 100;
+    let kissCombo = 0;
+    let kissTimeout;
+    let isFinaleTriggered = false; // Zapobiega wielokrotnemu wywołaniu
+    
+    const puppyMotion = document.getElementById('puppy-motion');
+    const bubbleSpeech = document.getElementById('bubble-speech');
+    const barFill = document.getElementById('love-bar');
+    const percentText = document.getElementById('love-percent');
+    const eyeL = document.getElementById('eye-l');
+    const eyeR = document.getElementById('eye-r');
+
+    // Canvas na małą liczbę cząsteczek
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const petExpressions = [
+      "Oooo! Moja ukochana Oliwia mnie głaszcze! Czuję się jak w pieskowym raju! 🥰🐾",
+      "Miziaj więcej! Moje małe uszka uwielbiają Twój ciepły dotyk, Skarbie! 💞🐶",
+      "Oliwia, Aymen prosił, żebym Ci przekazał, że jesteś najpiękniejszym aniołkiem na ziemi! 👑🌷",
+      "Mój ogonek merda tak szybko tylko dla Ciebie, moja jedyna! 🐕💨"
+    ];
+
+    const treats = [
+      { emoji: '🍩', text: "Mniam mniam! Pyszny pączuś od najcudowniejszej dziewczyny! Dziękuję Skarbie! 😋🍩" },
+      { emoji: '🍓', text: "Ooo! Słodka truskaweczka! Ale i tak nie jest tak słodka jak Ty, Oliwia! 🍓✨" },
+      { emoji: '🍦', text: "Zimne lody! Języczek aż mi się cieszy! Aymen by Ci teraz dał wielkiego buziaka! 🍦💖" }
+    ];
+
+    const deepCompliments = [
+      "Moja śliczna Oliwia, kiedy o Tobie myślę, czuję ogromny spokój. Jesteś moją jedyną i najprawdziwszą miłością. 🔒💖",
+      "Nawet najjaśniejsze gwiazdy gasną przy Twoim uśmiechu. Kocham Cię ponad wszystko na tym świecie. ✨🌷",
+      "Oliwia, jesteś moim domem. Każdy dzień spędzony z Tobą w moim sercu to najpiękniejszy dar. 🏡❤️"
+    ];
+
+    const missingCompliments = [
+      "I miss you baby... Gdzie uciekłaś, moja piękna Oliwia? Wróć do mnie! 🥺💔",
+      "I miss you baby... Szybko wróć, żeby mnie przytulić! Aymen strasznie tęskni! 🥺🌷",
+      "I miss you baby... Moje małe psie serduszko czuje się takie samotne bez Ciebie! ❤️🐾"
+    ];
+
+    let audioContext = null;
+    let isAudioOn = true;
+
+    function initAudio() {
+      if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    function toggleCuteAudio() {
+      isAudioOn = !isAudioOn;
+      const btn = document.getElementById('audio-toggle-btn');
+      btn.innerText = isAudioOn ? '🔊' : '🔇';
+      btn.classList.toggle('active', isAudioOn);
+      if (isAudioOn) playProceduralSound('chime');
+    }
+
+    function playProceduralSound(type) {
+      if (!isAudioOn) return;
+      initAudio();
+      if (!audioContext) return;
+      const now = audioContext.currentTime;
+      let osc = audioContext.createOscillator();
+      let gainNode = audioContext.createGain();
+      osc.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+
+      if (type === 'chime') {
+        osc.type = 'sine'; osc.frequency.setValueAtTime(600, now); osc.frequency.exponentialRampToValueAtTime(1200, now + 0.15);
+        gainNode.gain.setValueAtTime(0.08, now); gainNode.gain.linearRampToValueAtTime(0.001, now + 0.3);
+        osc.start(now); osc.stop(now + 0.3);
+      } else if (type === 'bark') {
+        osc.type = 'triangle'; osc.frequency.setValueAtTime(450, now); osc.frequency.exponentialRampToValueAtTime(750, now + 0.05);
+        gainNode.gain.setValueAtTime(0.1, now); gainNode.gain.linearRampToValueAtTime(0.001, now + 0.1);
+        osc.start(now); osc.stop(now + 0.1);
+      } else if (type === 'chew') {
+        osc.type = 'square'; osc.frequency.setValueAtTime(150, now); osc.frequency.setValueAtTime(220, now + 0.08);
+        gainNode.gain.setValueAtTime(0.05, now); gainNode.gain.linearRampToValueAtTime(0.001, now + 0.12);
+        osc.start(now); osc.stop(now + 0.12);
+      } else if (type === 'whimper') {
+        osc.type = 'sine'; osc.frequency.setValueAtTime(800, now); osc.frequency.exponentialRampToValueAtTime(950, now + 0.1); osc.frequency.exponentialRampToValueAtTime(750, now + 0.32);
+        gainNode.gain.setValueAtTime(0.04, now); gainNode.gain.linearRampToValueAtTime(0.001, now + 0.35);
+        osc.start(now); osc.stop(now + 0.35);
+      } else if (type === 'bell') {
+        osc.type = 'sine'; osc.frequency.setValueAtTime(1046.50, now);
+        gainNode.gain.setValueAtTime(0.06, now); gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+        osc.start(now); osc.stop(now + 0.4);
+      } else if (type === 'sneeze') {
+        osc.type = 'sawtooth'; osc.frequency.setValueAtTime(300, now); osc.frequency.exponentialRampToValueAtTime(1800, now + 0.08); osc.frequency.exponentialRampToValueAtTime(150, now + 0.25);
+        gainNode.gain.setValueAtTime(0.08, now); gainNode.gain.linearRampToValueAtTime(0.001, now + 0.28);
+        osc.start(now); osc.stop(now + 0.28);
+      }
+    }
+
+    function setEyeState(state) {
+      eyeL.className = 'p-eye left'; eyeR.className = 'p-eye right';
+      eyeL.innerText = ''; eyeR.innerText = '';
+      if (state === 'love') { eyeL.classList.add('eye-love'); eyeR.classList.add('eye-love'); eyeL.innerText = '❤️'; eyeR.innerText = '❤️'; }
+      else if (state === 'happy') { eyeL.classList.add('eye-happy'); eyeR.classList.add('eye-happy'); }
+      else if (state === 'sad') { eyeL.classList.add('eye-sad'); eyeR.classList.add('eye-sad'); }
+    }
+
+    // --- IDLE COUNTER (Dokładnie 3 Sekundy -> "I miss you baby") ---
+    let secondsSinceLastAction = 0;
+
+    function resetActionClock() {
+      secondsSinceLastAction = 0;
+      setEyeState('normal');
+      const mouth = document.getElementById('maksiu-mouth');
+      mouth.style.height = '8px'; mouth.style.borderRadius = '0 0 10px 10px'; mouth.style.bottom = '6px';
+    }
+
+    window.addEventListener('mousemove', resetActionClock);
+    window.addEventListener('touchstart', resetActionClock);
+
+    setInterval(() => {
+      secondsSinceLastAction++;
+      if (secondsSinceLastAction === 2) {
+        playProceduralSound('whimper');
+        setEyeState('sad');
+        
+        const mouth = document.getElementById('maksiu-mouth');
+        mouth.style.height = '4px'; mouth.style.borderRadius = '10px 10px 0 0'; mouth.style.bottom = '10px';
+        
+        const expression = missingCompliments[Math.floor(Math.random() * missingCompliments.length)];
+        bubbleSpeech.innerHTML = `🥺 <b>Maksiu płacze:</b> "${expression}"`;
+        
+        createParticleVisual('💧'); createParticleVisual('💧');
+      }
+    }, 1000);
+
+    function gainHappinessPoints(val) {
+      if (happiness >= targetHappiness) return;
+      happiness = Math.min(happiness + val, targetHappiness);
+      barFill.style.width = `${happiness}%`;
+      percentText.innerText = happiness;
+      
+      if (happiness >= targetHappiness && !isFinaleTriggered) {
+        isFinaleTriggered = true;
+        triggerGrandFinale();
+      }
+    }
+
+    function feedRandomTreat() {
+      if(isFinaleTriggered) return;
+      resetActionClock(); playProceduralSound('chew'); setEyeState('happy');
+      const treat = treats[Math.floor(Math.random() * treats.length)];
+      
+      puppyMotion.style.animation = 'chewBite 0.4s 3 ease-in-out';
+      document.getElementById('maksiu-mouth').style.height = '14px';
+      document.getElementById('maksiu-mouth').style.borderRadius = '50%';
+      
+      setTimeout(() => { puppyMotion.style.animation = 'puppyBreath 3s ease-in-out infinite'; resetActionClock(); }, 1200);
+
+      for (let i = 0; i < 2; i++) { createParticleVisual(treat.emoji); createParticleVisual('✨'); }
+
+      bubbleSpeech.innerHTML = treat.text;
+      gainHappinessPoints(12); // Szybciej zapełnia od 0
+    }
+
+    function tapTicklePuppy(event) {
+      if(isFinaleTriggered) return;
+      if (event && event.target && (event.target.classList.contains('p-nose') || event.target.id === 'puppy-tail' || event.target.classList.contains('p-ear'))) return;
+      
+      resetActionClock(); playProceduralSound('bark'); setEyeState('happy');
+
+      puppyMotion.style.transform = 'scale(1.1) rotate(-3deg)';
+      setTimeout(() => { puppyMotion.style.transform = 'none'; }, 250);
+
+      for (let i = 0; i < 2; i++) { createParticleVisual('🌸'); createParticleVisual('✨'); }
+
+      const phrase = petExpressions[Math.floor(Math.random() * petExpressions.length)];
+      bubbleSpeech.innerHTML = phrase;
+      gainHappinessPoints(8);
+    }
+
+    function sendKisses() {
+      if(isFinaleTriggered) return;
+      resetActionClock(); playProceduralSound('bell'); setEyeState('love');
+      
+      kissCombo++; clearTimeout(kissTimeout);
+      
+      if (kissCombo >= 3) { triggerKissRainCombo(); kissCombo = 0; return; }
+      kissTimeout = setTimeout(() => { kissCombo = 0; }, 1000);
+
+      const head = document.getElementById('puppy-head'); head.classList.add('blushing');
+      puppyMotion.style.transform = 'scale(1.15) translateY(-6px)';
+      
+      for (let i = 0; i < 3; i++) {
+        setTimeout(() => { createParticleVisual('💋'); createParticleVisual('💖'); }, i * 80);
+      }
+
+      bubbleSpeech.innerHTML = "💋 <i>MUUUAAAH!</i> Wielki, cieplutki buziak prosto w czółko! Maksiu rumieni się z miłości i przesyła ucałowania od Aymena! 🥰💍";
+      
+      setTimeout(() => { puppyMotion.style.transform = 'none'; head.classList.remove('blushing'); setEyeState('normal'); }, 1800);
+      gainHappinessPoints(15);
+    }
+
+    function sneezeSecret(event) {
+      if(isFinaleTriggered) return;
+      event.stopPropagation(); resetActionClock(); playProceduralSound('sneeze'); setEyeState('happy');
+      puppyMotion.style.transform = 'scale(1.2) rotate(5deg)';
+      
+      for (let i = 0; i < 3; i++) { createParticleVisual('❤️'); createParticleVisual('✨'); }
+      bubbleSpeech.innerHTML = "🤧 <i>*APSIK!*</i> Maksiu kichnął czystą miłością! Zdradził mi sekret: <i>\"Aymen myśli o Twoich pięknych oczach w każdej sekundzie!\"</i> ❤️🔑";
+      
+      setTimeout(() => { puppyMotion.style.transform = 'none'; resetActionClock(); }, 600);
+      gainHappinessPoints(20);
+    }
+
+    function wagTailSecret(event) {
+      if(isFinaleTriggered) return;
+      event.stopPropagation(); resetActionClock(); playProceduralSound('bark');
+      const tail = document.getElementById('puppy-tail');
+      tail.style.animation = 'tailCrazyWag 0.15s infinite alternate linear';
+      
+      for (let i = 0; i < 2; i++) { createParticleVisual('🌸'); }
+      bubbleSpeech.innerHTML = "🐕💨 <i>Merd, merd!</i> Kochanie, dotknęłaś mojego ogonka! Kręci się jak śmigiełko z radości, bo tak niesamowicie mocno Cię kochamy!";
+      
+      setTimeout(() => { tail.style.animation = 'tailWag 1s infinite alternate linear'; }, 2000);
+      gainHappinessPoints(15);
+    }
+
+    function pawHighFive(event, strona) {
+      if(isFinaleTriggered) return;
+      event.stopPropagation(); resetActionClock(); playProceduralSound('chime'); setEyeState('happy');
+      bubbleSpeech.innerHTML = `🐾 Przybiłaś piątkę z moją ${strona} łapką! Trzymam Cię mocno za rękę, Skarbie! Aymen nigdy Cię nie puści! ✨`;
+      for (let i = 0; i < 2; i++) { createParticleVisual('💖'); }
+      gainHappinessPoints(10);
+    }
+
+    function tickleEar(event, strona) {
+      if(isFinaleTriggered) return;
+      event.stopPropagation(); resetActionClock(); playProceduralSound('bell'); setEyeState('love');
+      const ear = event.target;
+      ear.style.transform = strona === 'lewe' ? 'rotate(-40deg)' : 'rotate(40deg)';
+      
+      for (let i = 0; i < 2; i++) { createParticleVisual('✨'); }
+      bubbleSpeech.innerHTML = `👂 <i>Mizia mizia...</i> Dotknęłaś mojego ${strona}go uszka! Wiesz co słyszę? Jak serce Aymena głośno bije tylko dla Ciebie, Oliwia! 🥰`;
+      
+      setTimeout(() => { ear.style.transform = ''; }, 1000);
+      gainHappinessPoints(12);
+    }
+
+    function happyBurst() {
+      playProceduralSound('bell');
+      for (let i = 0; i < 4; i++) { createParticleVisual('👑'); createParticleVisual('💖'); }
+    }
+    function secretAymenWhisper() {
+      bubbleSpeech.innerHTML = "🤫 <i>Cichutki szept Aymena prosto do Twojego ucha:</i> \"Oliwia, jesteś moim całym światem... Jesteś moją prawdziwą królową, kocham Cię ponad wszystko!\" 🔒🌷";
+    }
+
+    // Zoptymalizowany system cząsteczek
+    function createParticleVisual(emoji) {
+      const x = canvas.width / 2 + (Math.random() * 120 - 60);
+      const y = canvas.height / 2 + 50;
+      particles.push({
+        x: x, y: y, vx: (Math.random() * 4 - 2), vy: -(Math.random() * 5 + 3),
+        emoji: emoji, alpha: 1, size: Math.random() * 14 + 22,
+        rotation: Math.random() * 360, vRot: (Math.random() * 4 - 2)
+      });
+    }
+
+    function updateAndDrawParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = particles.length - 1; i >= 0; i--) {
+        let p = particles[i];
+        p.x += p.vx; p.y += p.vy; p.vy += 0.05; p.alpha -= 0.02;
+        p.rotation += p.vRot;
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.alpha); ctx.translate(p.x, p.y); ctx.rotate(p.rotation * Math.PI / 180);
+        ctx.font = `${p.size}px serif`; ctx.fillText(p.emoji, -p.size / 2, p.size / 2);
+        ctx.restore();
+        if (p.alpha <= 0) particles.splice(i, 1);
+      }
+      requestAnimationFrame(updateAndDrawParticles);
+    }
+    requestAnimationFrame(updateAndDrawParticles);
+
+    function triggerKissRainCombo() {
+      bubbleSpeech.innerHTML = "🔥 <b>COMBO CAŁUSKÓW!</b> Oliwia wysyła masę miłości! Deszcz słodziutkich buziaków dla Aymena i Maksia! 💋💋💋";
+      playProceduralSound('bell');
+      for (let i = 0; i < 12; i++) {
+        setTimeout(() => { createParticleVisual('💋'); createParticleVisual('💖'); }, i * 100);
+      }
+      gainHappinessPoints(25);
+    }
+
+    // --- RĘCZNE OTWIERANIE (Gdyby kliknęła wcześniej) ---
+    function openLovePost() {
+      playProceduralSound('chime');
+      document.getElementById('diary-overlay').style.display = 'flex';
+      
+      if(happiness >= 100) {
+        setupFinalLetterContent();
+      } else {
+        document.getElementById('letter-title').innerText = "Krótki liścik od Aymena 🔒";
+        const text = deepCompliments[Math.floor(Math.random() * deepCompliments.length)];
+        document.getElementById('letter-text').innerText = text;
+      }
+    }
+
+    function revealLetterPaper() { document.getElementById('envelope-letter').classList.add('opened'); playProceduralSound('chime'); }
+    function closeDiaryOverlay() {
+      document.getElementById('envelope-letter').classList.remove('opened');
+      document.getElementById('diary-overlay').style.display = 'none';
+      playProceduralSound('chime');
+    }
+
+    function setupFinalLetterContent() {
+      document.getElementById('letter-title').innerText = "Moja Jedyna Prawdziwa Miłość 🔒";
+      document.getElementById('letter-text').innerHTML = "Oliwia, Kochanie... <br><br>Wypełniłaś to małe serduszko od zera, dokładnie tak, jak pewnego dnia wypełniłaś moje życie całkowicie, nadając mu najpiękniejszy sens. Jesteś moją bajką, moim aniołem, spełnieniem każdego mojego snu.<br><br>Maksiu zawsze merda ogonkiem na Twój widok, ale uwierz mi... to moje serce bije najszybciej i bije <b>tylko i wyłącznie dla Ciebie.</b><br><br>Nigdy Cię nie puszczę, Skarbie.<br>Twój na zawsze, Aymen ❤️🌹";
+    }
+
+    // --- ZAUTOMATYZOWANY WIELKI FINAŁ (Gdy Pasek Osiągnie 100%) ---
+    function triggerGrandFinale() {
+      bubbleSpeech.innerHTML = "🎉 <b>KOCHAM CIĘ!</b> Serduszko napełnione na 100%! Maksiu skacze z radości, a Twój Książę ma dla Ciebie list! 💌💖";
+      document.getElementById('mailbox').classList.add('unread');
+      barFill.classList.add('full'); // Pasek zaczyna pulsować
+      
+      playProceduralSound('chime');
+      
+      for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+          createParticleVisual('🌹'); createParticleVisual('💖');
+        }, i * 60);
+      }
+
+      // Automatyczne pokazanie romantycznego listu po 1.8 sekundy
+      setTimeout(() => {
+        document.getElementById('diary-overlay').style.display = 'flex';
+        setupFinalLetterContent();
+        
+        // Pół sekundy po pojawieniu się koperty, otwiera się ona sama
+        setTimeout(() => {
+          document.getElementById('envelope-letter').classList.add('opened');
+          playProceduralSound('bell');
+        }, 800);
+
+      }, 1800);
+    }
+  </script>
+</body>
+</html>
