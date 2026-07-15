@@ -720,7 +720,7 @@
 
     <div class="app-header">
       <div class="title-logo" onclick="happyBurst(); secretAymenWhisper();">
-         <span>💖 My Sweet Oliwita💖</span>
+         <span>💖 My Sweet Oliwia💖</span>
       </div>
       <div class="sound-toggle active" id="audio-toggle-btn" onclick="toggleCuteAudio()">🔊</div>
     </div>
@@ -735,7 +735,7 @@
 
     <div class="bubble-wrapper">
       <div class="speech-bubble" id="bubble-speech">
-        Hau hau! Oliwita, brakuje mi miłości! Napełnij pasek do 100%, a pokażę Ci niespodziankę, którą zostawił dla Ciebie Aymen! 🐾🌹
+        Hau hau! Oliwia, brakuje mi miłości! Napełnij pasek do 100%, a pokażę Ci niespodziankę, którą zostawił dla Ciebie Aymen! 🐾🌹
       </div>
     </div>
 
@@ -830,7 +830,7 @@
     resizeCanvas();
 
     const petExpressions = [
-      "Oooo! Moja ukochana Oliwita mnie głaszcze! Czuję się jak w pieskowym raju! 🥰🐾",
+      "Oooo! Moja ukochana Oliwia mnie głaszcze! Czuję się jak w pieskowym raju! 🥰🐾",
       "Miziaj więcej! Moje małe uszka uwielbiają Twój ciepły dotyk, Skarbie! 💞🐶",
       "Oliwia, Aymen prosił, żebym Ci przekazał, że jesteś najpiękniejszym aniołkiem na ziemi! 👑🌷",
       "Mój ogonek merda tak szybko tylko dla Ciebie, moja jedyna! 🐕💨"
@@ -843,7 +843,7 @@
     ];
 
     const deepCompliments = [
-      "Moja śliczna Oliwita, kiedy o Tobie myślę, czuję ogromny spokój. Jesteś moją jedyną i najprawdziwszą miłością. 🔒💖",
+      "Moja śliczna Oliwia, kiedy o Tobie myślę, czuję ogromny spokój. Jesteś moją jedyną i najprawdziwszą miłością. 🔒💖",
       "Nawet najjaśniejsze gwiazdy gasną przy Twoim uśmiechu. Kocham Cię ponad wszystko na tym świecie. ✨🌷",
       "Oliwia, jesteś moim domem. Każdy dzień spędzony z Tobą w moim sercu to najpiękniejszy dar. 🏡❤️"
     ];
@@ -928,7 +928,7 @@
 
     setInterval(() => {
       secondsSinceLastAction++;
-      if (secondsSinceLastAction === 4) {
+      if (secondsSinceLastAction === 5) {
         playProceduralSound('whimper');
         setEyeState('sad');
         
@@ -1060,7 +1060,7 @@
       for (let i = 0; i < 4; i++) { createParticleVisual('👑'); createParticleVisual('💖'); }
     }
     function secretAymenWhisper() {
-      bubbleSpeech.innerHTML = "🤫 <i>Cichutki szept Aymena prosto do Twojego ucha:</i> \"Oliwita, jesteś moim całym światem... Jesteś moją prawdziwą królową, kocham Cię ponad wszystko!\" 🔒🌷";
+      bubbleSpeech.innerHTML = "🤫 <i>Cichutki szept Aymena prosto do Twojego ucha:</i> \"Oliwia, jesteś moim całym światem... Jesteś moją prawdziwą królową, kocham Cię ponad wszystko!\" 🔒🌷";
     }
 
     function createParticleVisual(emoji) {
@@ -1090,7 +1090,7 @@
     requestAnimationFrame(updateAndDrawParticles);
 
     function triggerKissRainCombo() {
-      bubbleSpeech.innerHTML = "🔥 <b>COMBO CAŁUSKÓW!</b> Oliwita wysyła masę miłości! Deszcz słodziutkich buziaków dla Aymena i Maksia! 💋💋💋";
+      bubbleSpeech.innerHTML = "🔥 <b>COMBO CAŁUSKÓW!</b> Oliwia wysyła masę miłości! Deszcz słodziutkich buziaków dla Aymena i Maksia! 💋💋💋";
       playProceduralSound('bell');
       for (let i = 0; i < 12; i++) {
         setTimeout(() => { createParticleVisual('💋'); createParticleVisual('💖'); }, i * 100);
@@ -1121,7 +1121,7 @@
 
     function setupFinalLetterContent() {
       document.getElementById('letter-title').innerText = "Moja Jedyna Prawdziwa Miłość 🔒";
-      document.getElementById('letter-text').innerHTML = "Oliwita, Kochanie... <br><br>Wypełniłaś to małe serduszko od zera, dokładnie tak, jak pewnego dnia wypełniłaś moje życie całkowicie, nadając mu najpiękniejszy sens. Jesteś moją bajką, moim aniołem, spełnieniem każdego mojego snu.<br><br>Maksiu zawsze merda ogonkiem na Twój widok, ale uwierz mi... to moje serce bije najszybciej i bije <b>tylko i wyłącznie dla Ciebie.</b><br><br>Nigdy Cię nie puszczę, Skarbie.<br>Twój na zawsze, Aymen ❤️🌹";
+      document.getElementById('letter-text').innerHTML = "Oliwia, Kochanie... <br><br>Wypełniłaś to małe serduszko od zera, dokładnie tak, jak pewnego dnia wypełniłaś moje życie całkowicie, nadając mu najpiękniejszy sens. Jesteś moją bajką, moim aniołem, spełnieniem każdego mojego snu.<br><br>Maksiu zawsze merda ogonkiem na Twój widok, ale uwierz mi... to moje serce bije najszybciej i bije <b>tylko i wyłącznie dla Ciebie.</b><br><br>Nigdy Cię nie puszczę, Skarbie.<br>Twój na zawsze, Aymen ❤️🌹";
     }
 
     function triggerGrandFinale() {
