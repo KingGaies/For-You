@@ -29,7 +29,7 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      min-height: 100dvh; /* Lepsza obsługa pasków przeglądarek mobilnych */
+      min-height: 100dvh; 
       overflow: hidden;
       position: relative;
     }
@@ -305,7 +305,6 @@
       z-index: 5;
     }
 
-    /* Uszka */
     .p-ear {
       position: absolute;
       width: 35px;
@@ -522,13 +521,15 @@
     }
 
     .envelope-box {
-      width: 280px; /* Optymalny rozmiar pod mniejsze ekrany */
+      width: 280px; 
       height: 180px;
       background: #ff8fa3;
       border-radius: 12px;
       position: relative;
       cursor: pointer;
       box-shadow: 0 10px 30px rgba(201, 24, 74, 0.25);
+      /* Koperta zjeżdża lekko w dół po otwarciu, aby wyśrodkować list! */
+      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.1);
     }
     .envelope-box::before {
       content: ''; position: absolute; top: 0; left: 0;
@@ -540,7 +541,14 @@
       border-left: 140px solid #ffb3c6; border-right: 140px solid #ffb3c6;
       border-top: 90px solid transparent; border-bottom: 90px solid #ffb3c6; border-radius: 12px; z-index: 3;
     }
-    .envelope-box.opened::before { transform: rotateX(180deg); z-index: 1; }
+    
+    /* GŁÓWNA MAGIA CENTROWANIA - Koperta opada, a list się unosi */
+    .envelope-box.opened { 
+      transform: translateY(130px); 
+    }
+    .envelope-box.opened::before { 
+      transform: rotateX(180deg); z-index: 1; 
+    }
 
     .envelope-seal {
       position: absolute; top: 90px; left: 50%;
@@ -548,36 +556,51 @@
     }
     .envelope-box.opened .envelope-seal { transform: translate(-50%, -150px) scale(0); opacity: 0; }
 
+    /* PIĘKNY, ROMANTYCZNY LIST */
     .letter-paper {
       position: absolute; 
       bottom: 10px; 
       left: 10px; 
       width: 260px;
       height: 150px;
-      background: #fffcfd; 
-      border-radius: 10px; 
-      border: 1.5px solid #ffccd5; 
+      background: #ffffff;
+      background-image: radial-gradient(circle, #ffffff 50%, #fff0f3 100%);
+      border-radius: 12px; 
+      border: 3px double #ff99ac; 
       padding: 24px 20px; 
       z-index: 2;
-      transition: transform 0.6s 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.1), height 0.6s 0.2s, width 0.6s 0.2s, left 0.6s 0.2s; 
+      transition: transform 0.6s 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.1), height 0.6s 0.2s, width 0.6s 0.2s, left 0.6s 0.2s, box-shadow 0.6s 0.2s; 
       overflow-y: auto;
       box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-    /* Po otwarciu list rozszerza się idealnie i płynnie wewnątrz koperty */
+
+    /* Śliczny scrollbar dla długiego tekstu */
+    .letter-paper::-webkit-scrollbar { width: 5px; }
+    .letter-paper::-webkit-scrollbar-track { background: transparent; }
+    .letter-paper::-webkit-scrollbar-thumb { background: #ffb3c6; border-radius: 10px; }
+
+    /* Po otwarciu list rozszerza się i jest IDEALNIE na środku ekranu */
     .envelope-box.opened .letter-paper { 
-      transform: translateY(-110px); 
-      height: 420px; 
-      width: 310px;
-      left: -15px; 
+      transform: translateY(-130px); /* Unosi się wyżej, by zrekompensować opadnięcie koperty */
+      height: 440px; 
+      width: 320px;
+      left: -20px; /* Centrowanie szerokości na kopercie (280 -> 320) */
       z-index: 5; 
+      box-shadow: 0 20px 50px rgba(201, 24, 74, 0.3);
     }
+
     .letter-paper h3 { 
       color: #c9184a; 
-      font-size: 1.25rem; 
-      margin-bottom: 15px; 
+      font-size: 1.35rem; 
+      margin-bottom: 20px; 
       font-family: Georgia, serif; 
       text-align: center;
-      /* Umożliwia Oliwii skopiowanie Twojego pięknego tekstu */
+      width: 100%;
+      border-bottom: 2px dashed #ffccd5;
+      padding-bottom: 12px;
       user-select: text;
       -webkit-user-select: text; 
     }
@@ -586,12 +609,29 @@
       font-size: 1.05rem; 
       color: #590d22; 
       line-height: 1.6; 
-      margin-bottom: 15px; 
+      margin-bottom: 20px; 
       text-align: center;
       user-select: text;
       -webkit-user-select: text; 
+      flex-grow: 1; /* Pycha przycisk na sam dół */
     }
-    .letter-close-btn { background: linear-gradient(90deg, #ff4d6d 0%, #c9184a 100%); color: white; border: none; padding: 12px 24px; border-radius: 20px; font-weight: bold; cursor: pointer; margin-top: 15px; width: 100%; box-shadow: 0 4px 10px rgba(255, 77, 109, 0.3); }
+    .letter-close-btn { 
+      background: linear-gradient(135deg, #ff4d6d 0%, #c9184a 100%); 
+      color: white; 
+      border: none; 
+      padding: 14px 24px; 
+      border-radius: 30px; 
+      font-weight: bold; 
+      cursor: pointer; 
+      margin-top: auto; 
+      width: 100%; 
+      box-shadow: 0 6px 15px rgba(201, 24, 74, 0.3); 
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .letter-close-btn:hover {
+      transform: scale(1.03) translateY(-2px);
+      box-shadow: 0 8px 20px rgba(201, 24, 74, 0.45);
+    }
 
     /* --- DOPASOWANIE DO KRÓTSZYCH/MNIEJSZYCH TELEFONÓW (np. iPhone SE) --- */
     @media (max-height: 750px) {
@@ -616,9 +656,24 @@
       .dock-btn {
         padding: 12px 4px;
       }
+      
+      /* Dopasowanie proporcji dla niższych ekranów by list nie uciekał z góry */
+      .envelope-box.opened {
+        transform: translateY(100px);
+      }
       .envelope-box.opened .letter-paper {
-        height: 340px;
-        transform: translateY(-130px);
+        height: 380px;
+        transform: translateY(-110px);
+      }
+    }
+    
+    @media (max-height: 600px) {
+      .envelope-box.opened {
+        transform: translateY(70px);
+      }
+      .envelope-box.opened .letter-paper {
+        height: 320px;
+        transform: translateY(-80px);
       }
     }
 
@@ -633,6 +688,10 @@
         font-size: 2.8rem;
         left: 15px;
         bottom: 40px;
+      }
+      .envelope-box.opened .letter-paper {
+        width: 290px;
+        left: -5px;
       }
     }
 
@@ -650,6 +709,7 @@
 </head>
 <body>
 
+  <!-- Romantyczne pływające dekoracje -->
   <div class="bg-decor b1">🌹</div>
   <div class="bg-decor b2">✨</div>
   <div class="bg-decor b3">💖</div>
@@ -660,13 +720,14 @@
 
     <div class="app-header">
       <div class="title-logo" onclick="happyBurst(); secretAymenWhisper();">
-         <span>💖 My Sweet Oliwia💖</span>
+         <span>💖 My Sweet Oliwita💖</span>
       </div>
       <div class="sound-toggle active" id="audio-toggle-btn" onclick="toggleCuteAudio()">🔊</div>
     </div>
 
     <div class="status-dashboard">
       <div class="level-bar-container">
+        <!-- Pasek zaczyna od 0% -->
         <div class="level-bar-fill" id="love-bar"></div>
         <div class="level-text">Serduszko: <span id="love-percent">0</span>%</div>
       </div>
@@ -674,7 +735,7 @@
 
     <div class="bubble-wrapper">
       <div class="speech-bubble" id="bubble-speech">
-        Hau hau! Oliwia, brakuje mi miłości! Napełnij pasek do 100%, a pokażę Ci niespodziankę, którą zostawił dla Ciebie Aymen! 🐾🌹
+        Hau hau! Oliwita, brakuje mi miłości! Napełnij pasek do 100%, a pokażę Ci niespodziankę, którą zostawił dla Ciebie Aymen! 🐾🌹
       </div>
     </div>
 
@@ -728,6 +789,7 @@
     </div>
   </div>
 
+  <!-- Poczta Miłości (Pojawia się przy 100%) -->
   <div id="diary-overlay">
     <div class="diary-headline">✨ Otwórz, Kochanie ✨</div>
     <div class="envelope-box" id="envelope-letter" onclick="revealLetterPaper()">
@@ -746,7 +808,7 @@
     const targetHappiness = 100;
     let kissCombo = 0;
     let kissTimeout;
-    let isFinaleTriggered = false; // Zapobiega wielokrotnemu wywołaniu
+    let isFinaleTriggered = false; 
     
     const puppyMotion = document.getElementById('puppy-motion');
     const bubbleSpeech = document.getElementById('bubble-speech');
@@ -768,7 +830,7 @@
     resizeCanvas();
 
     const petExpressions = [
-      "Oooo! Moja ukochana Oliwia mnie głaszcze! Czuję się jak w pieskowym raju! 🥰🐾",
+      "Oooo! Moja ukochana Oliwita mnie głaszcze! Czuję się jak w pieskowym raju! 🥰🐾",
       "Miziaj więcej! Moje małe uszka uwielbiają Twój ciepły dotyk, Skarbie! 💞🐶",
       "Oliwia, Aymen prosił, żebym Ci przekazał, że jesteś najpiękniejszym aniołkiem na ziemi! 👑🌷",
       "Mój ogonek merda tak szybko tylko dla Ciebie, moja jedyna! 🐕💨"
@@ -776,18 +838,18 @@
 
     const treats = [
       { emoji: '🍩', text: "Mniam mniam! Pyszny pączuś od najcudowniejszej dziewczyny! Dziękuję Skarbie! 😋🍩" },
-      { emoji: '🍓', text: "Ooo! Słodka truskaweczka! Ale i tak nie jest tak słodka jak Ty, Oliwia! 🍓✨" },
+      { emoji: '🍓', text: "Ooo! Słodka truskaweczka! Ale i tak nie jest tak słodka jak Ty, Oliwita! 🍓✨" },
       { emoji: '🍦', text: "Zimne lody! Języczek aż mi się cieszy! Aymen by Ci teraz dał wielkiego buziaka! 🍦💖" }
     ];
 
     const deepCompliments = [
-      "Moja śliczna Oliwia, kiedy o Tobie myślę, czuję ogromny spokój. Jesteś moją jedyną i najprawdziwszą miłością. 🔒💖",
+      "Moja śliczna Oliwita, kiedy o Tobie myślę, czuję ogromny spokój. Jesteś moją jedyną i najprawdziwszą miłością. 🔒💖",
       "Nawet najjaśniejsze gwiazdy gasną przy Twoim uśmiechu. Kocham Cię ponad wszystko na tym świecie. ✨🌷",
       "Oliwia, jesteś moim domem. Każdy dzień spędzony z Tobą w moim sercu to najpiękniejszy dar. 🏡❤️"
     ];
 
     const missingCompliments = [
-      "I miss you baby... Gdzie uciekłaś, moja piękna Oliwia? Wróć do mnie! 🥺💔",
+      "I miss you baby... Gdzie uciekłaś, moja piękna Oliwita? Wróć do mnie! 🥺💔",
       "I miss you baby... Szybko wróć, żeby mnie przytulić! Aymen strasznie tęskni! 🥺🌷",
       "I miss you baby... Moje małe psie serduszko czuje się takie samotne bez Ciebie! ❤️🐾"
     ];
@@ -852,7 +914,6 @@
       else if (state === 'sad') { eyeL.classList.add('eye-sad'); eyeR.classList.add('eye-sad'); }
     }
 
-    // --- IDLE COUNTER (Dokładnie 3 Sekundy -> "I miss you baby") ---
     let secondsSinceLastAction = 0;
 
     function resetActionClock() {
@@ -867,7 +928,7 @@
 
     setInterval(() => {
       secondsSinceLastAction++;
-      if (secondsSinceLastAction === 2) {
+      if (secondsSinceLastAction === 4) {
         playProceduralSound('whimper');
         setEyeState('sad');
         
@@ -907,7 +968,7 @@
       for (let i = 0; i < 2; i++) { createParticleVisual(treat.emoji); createParticleVisual('✨'); }
 
       bubbleSpeech.innerHTML = treat.text;
-      gainHappinessPoints(12); // Szybciej zapełnia od 0
+      gainHappinessPoints(12);
     }
 
     function tapTicklePuppy(event) {
@@ -999,10 +1060,9 @@
       for (let i = 0; i < 4; i++) { createParticleVisual('👑'); createParticleVisual('💖'); }
     }
     function secretAymenWhisper() {
-      bubbleSpeech.innerHTML = "🤫 <i>Cichutki szept Aymena prosto do Twojego ucha:</i> \"Oliwia, jesteś moim całym światem... Jesteś moją prawdziwą królową, kocham Cię ponad wszystko!\" 🔒🌷";
+      bubbleSpeech.innerHTML = "🤫 <i>Cichutki szept Aymena prosto do Twojego ucha:</i> \"Oliwita, jesteś moim całym światem... Jesteś moją prawdziwą królową, kocham Cię ponad wszystko!\" 🔒🌷";
     }
 
-    // Zoptymalizowany system cząsteczek
     function createParticleVisual(emoji) {
       const x = canvas.width / 2 + (Math.random() * 120 - 60);
       const y = canvas.height / 2 + 50;
@@ -1030,7 +1090,7 @@
     requestAnimationFrame(updateAndDrawParticles);
 
     function triggerKissRainCombo() {
-      bubbleSpeech.innerHTML = "🔥 <b>COMBO CAŁUSKÓW!</b> Oliwia wysyła masę miłości! Deszcz słodziutkich buziaków dla Aymena i Maksia! 💋💋💋";
+      bubbleSpeech.innerHTML = "🔥 <b>COMBO CAŁUSKÓW!</b> Oliwita wysyła masę miłości! Deszcz słodziutkich buziaków dla Aymena i Maksia! 💋💋💋";
       playProceduralSound('bell');
       for (let i = 0; i < 12; i++) {
         setTimeout(() => { createParticleVisual('💋'); createParticleVisual('💖'); }, i * 100);
@@ -1038,7 +1098,6 @@
       gainHappinessPoints(25);
     }
 
-    // --- RĘCZNE OTWIERANIE (Gdyby kliknęła wcześniej) ---
     function openLovePost() {
       playProceduralSound('chime');
       document.getElementById('diary-overlay').style.display = 'flex';
@@ -1053,6 +1112,7 @@
     }
 
     function revealLetterPaper() { document.getElementById('envelope-letter').classList.add('opened'); playProceduralSound('chime'); }
+    
     function closeDiaryOverlay() {
       document.getElementById('envelope-letter').classList.remove('opened');
       document.getElementById('diary-overlay').style.display = 'none';
@@ -1061,14 +1121,13 @@
 
     function setupFinalLetterContent() {
       document.getElementById('letter-title').innerText = "Moja Jedyna Prawdziwa Miłość 🔒";
-      document.getElementById('letter-text').innerHTML = "Oliwia, Kochanie... <br><br>Wypełniłaś to małe serduszko od zera, dokładnie tak, jak pewnego dnia wypełniłaś moje życie całkowicie, nadając mu najpiękniejszy sens. Jesteś moją bajką, moim aniołem, spełnieniem każdego mojego snu.<br><br>Maksiu zawsze merda ogonkiem na Twój widok, ale uwierz mi... to moje serce bije najszybciej i bije <b>tylko i wyłącznie dla Ciebie.</b><br><br>Nigdy Cię nie puszczę, Skarbie.<br>Twój na zawsze, Aymen ❤️🌹";
+      document.getElementById('letter-text').innerHTML = "Oliwita, Kochanie... <br><br>Wypełniłaś to małe serduszko od zera, dokładnie tak, jak pewnego dnia wypełniłaś moje życie całkowicie, nadając mu najpiękniejszy sens. Jesteś moją bajką, moim aniołem, spełnieniem każdego mojego snu.<br><br>Maksiu zawsze merda ogonkiem na Twój widok, ale uwierz mi... to moje serce bije najszybciej i bije <b>tylko i wyłącznie dla Ciebie.</b><br><br>Nigdy Cię nie puszczę, Skarbie.<br>Twój na zawsze, Aymen ❤️🌹";
     }
 
-    // --- ZAUTOMATYZOWANY WIELKI FINAŁ (Gdy Pasek Osiągnie 100%) ---
     function triggerGrandFinale() {
       bubbleSpeech.innerHTML = "🎉 <b>KOCHAM CIĘ!</b> Serduszko napełnione na 100%! Maksiu skacze z radości, a Twój Książę ma dla Ciebie list! 💌💖";
       document.getElementById('mailbox').classList.add('unread');
-      barFill.classList.add('full'); // Pasek zaczyna pulsować
+      barFill.classList.add('full'); 
       
       playProceduralSound('chime');
       
@@ -1078,12 +1137,10 @@
         }, i * 60);
       }
 
-      // Automatyczne pokazanie romantycznego listu po 1.8 sekundy
       setTimeout(() => {
         document.getElementById('diary-overlay').style.display = 'flex';
         setupFinalLetterContent();
         
-        // Pół sekundy po pojawieniu się koperty, otwiera się ona sama
         setTimeout(() => {
           document.getElementById('envelope-letter').classList.add('opened');
           playProceduralSound('bell');
